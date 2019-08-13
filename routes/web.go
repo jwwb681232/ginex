@@ -9,6 +9,7 @@ func Init() *gin.Engine {
 	router := gin.Default()
 	router.LoadHTMLGlob("views/**/*")
 	router.GET("/register",auth.ShowRegistrationForm)
+	router.GET("/register-all",auth.ShowRegistrationFormAll)
 
 	return router
 }
