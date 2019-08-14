@@ -8,7 +8,11 @@ import (
 
 func ShowRegistrationForm(c *gin.Context) {
 	models.Get()
-	c.HTML(http.StatusOK,"auth/register.html",gin.H{"title":"注册页"})
+	c.HTML(http.StatusOK,"auth/register.html",gin.H{"title":"Register Page"})
+}
+
+func ShowLoginForm(c *gin.Context) {
+	c.HTML(http.StatusOK,"auth/login.html",gin.H{"title":"Login Page"})
 }
 
 func ShowRegistrationFormAll(c *gin.Context) {
