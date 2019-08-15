@@ -8,9 +8,13 @@ import (
 func Init() *gin.Engine {
 	router := gin.Default()
 	router.LoadHTMLGlob("views/**/*")
-	router.GET("/login",auth.ShowLoginForm)
+
 	router.GET("/register",auth.ShowRegistrationForm)
-	router.GET("/register-all",auth.ShowRegistrationFormAll)
+	router.POST("/register",auth.Register)
+
+	router.GET("/login",auth.ShowLoginForm)
+	router.POST("/login",auth.Login)
+
 
 	return router
 }

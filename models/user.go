@@ -34,7 +34,22 @@ func Get() {
 	fmt.Println(user)
 }
 
-func All() []User {
+func GetUser(email string) {
+	user := User{}
+	row := db.QueryRow("SELECT * FROM users WHERE email = ?", email)
+	err := row.Scan(&user.Id, &user.Name, &user.Email,&user.Password, &user.RememberToken, &user.CreatedAt, &user.UpdatedAt, &user.DeletedAt)
+	if err != nil {
+		fmt.Println(err)
+	}
+	fmt.Println(user)
+}
+
+func StoreUser(user User) (int64, error) {
+	//todo store user data
+	//return db.Exec("INSERT INTO users(`name`,`email`,`password`) VALUES (?,?,?)",user.Name,user.Email,user.Password)
+}
+
+/*func All() []User {
 	var users []User
 	rows,err := db.Query("SELECT * FROM users")
 	if err != nil {
@@ -47,4 +62,4 @@ func All() []User {
 		users = append(users,user)
 	}
 	return users
-}
+}*/
