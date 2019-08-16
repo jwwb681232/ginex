@@ -28,23 +28,13 @@ func Register(c *gin.Context) {
 	id,err := models.StoreUser(models.User{Name:data.Name,Email:data.Email,Password:data.Password})
 
 	if err != sql.ErrNoRows {
-		/*c.HTML(http.StatusConflict,"auth/register.html",gin.H{
-			"code":http.StatusConflict,
-			"message":map[string]string{"email":"The email address already exists"},
-		})*/
-
-		flash := helpers.Flash(c,"The email address already exists")
-		c.JSON(http.StatusOK, gin.H{
-			"id":flash,
-		})
-		return
-		c.HTML(http.StatusConflict,"auth/register.html",gin.H{
+		flash := helpers.Flash(c, map[string]interface{}{
 			"code":http.StatusConflict,
 			"message":[]string{"The email address already exists"},
 		})
+		c.HTML(http.StatusConflict,"auth/register.html",flash)
 		return
 	}
-
 
 	c.JSON(http.StatusOK, gin.H{
 		"id":id,
