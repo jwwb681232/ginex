@@ -4,6 +4,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"ginex/models"
+	"database/sql"
+	"github.com/gin-contrib/sessions"
 )
 
 type RegisterForm struct {
@@ -14,7 +16,7 @@ type RegisterForm struct {
 }
 
 func ShowRegistrationForm(c *gin.Context) {
-	c.HTML(http.StatusOK, "auth/register.html", gin.H{"title": "Register Page"})
+	c.HTML(http.StatusOK, "auth/register.html", gin.H{"code":http.StatusOK,"message":make(map[string]string)})
 }
 
 func Register(c *gin.Context) {
@@ -23,9 +25,32 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	id,err := models.StoreUser(models.User{Name:data.Name,Email:data.Email,Password:data.Password})
+
+	if err != sql.ErrNoRows {
+		/*c.HTML(http.StatusConflict,"auth/register.html",gin.H{
+			"code":http.StatusConflict,
+			"message":map[string]string{"email":"The email address already exists"},
+		})*/
+		session := sessions.Default(c)
+		session.AddFlash("The email address already exists")
+		flash := session.Flashes()
+		session.Save()
+
+		c.JSON(http.StatusOK, gin.H{
+			"id":flash,
+		})
+		return
+		c.HTML(http.StatusConflict,"auth/register.html",gin.H{
+			"code":http.StatusConflict,
+			"message":[]string{"The email address already exists"},
+		})
+		return
+	}
+
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": data,
+		"id":id,
 	})
 }
 

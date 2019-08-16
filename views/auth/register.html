@@ -66,6 +66,15 @@
             <!-- end register-header -->
             <!-- begin register-content -->
             <div class="register-content">
+                {{ if ne .code 200 }}
+                <div class="alert alert-danger">
+                    <ul>
+                        {{ range $v := .message}}
+                            <li>{{ $v }}</li>
+                        {{end}}
+                    </ul>
+                </div>
+                {{end}}
                 <form action="/register" method="POST" class="margin-bottom-0">
                     <label class="control-label">Name</label>
                     <div class="row m-b-15">
