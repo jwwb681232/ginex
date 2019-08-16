@@ -5,10 +5,10 @@ import (
 	"github.com/gin-contrib/sessions"
 )
 
-func Flash(context *gin.Context,value interface{}) []interface{} {
+func Flash(context *gin.Context,value interface{}) interface{} {
 	session := sessions.Default(context)
 	session.AddFlash(value)
-	flash := session.Flashes()
+	flash := session.Flashes()[0]
 	session.Save()
 	return flash
 }
