@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"ginex/models"
 	"database/sql"
-	"github.com/gin-contrib/sessions"
+	"ginex/helpers"
 )
 
 type RegisterForm struct {
@@ -32,11 +32,8 @@ func Register(c *gin.Context) {
 			"code":http.StatusConflict,
 			"message":map[string]string{"email":"The email address already exists"},
 		})*/
-		session := sessions.Default(c)
-		session.AddFlash("The email address already exists")
-		flash := session.Flashes()
-		session.Save()
 
+		flash := helpers.Flash(c,"The email address already exists")
 		c.JSON(http.StatusOK, gin.H{
 			"id":flash,
 		})
