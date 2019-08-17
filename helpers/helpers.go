@@ -1,8 +1,8 @@
 package helpers
 
 import (
-	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
 )
 
 func Flash(context *gin.Context,value interface{}) interface{} {
