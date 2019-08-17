@@ -1,11 +1,11 @@
 package auth
 
 import (
-	"github.com/gin-gonic/gin"
-	"net/http"
-	"ginex/models"
 	"database/sql"
 	"ginex/helpers"
+	"ginex/models"
+	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 type RegisterForm struct {
