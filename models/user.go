@@ -44,6 +44,7 @@ func StoreUser(user User) (int64, error) {
 
 	//获取这个邮箱是否存在
 	_,err := GetUser(user.Email)
+	fmt.Println(err)
 
 	//如果错误不是没找到数据（那就是找到了数据）就返回不继续执行
 	if err != sql.ErrNoRows {
