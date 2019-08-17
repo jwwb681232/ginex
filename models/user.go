@@ -1,11 +1,11 @@
 package models
 
 import (
-	"time"
-	"ginex/database"
+	"database/sql"
 	"fmt"
+	"ginex/database"
 	"golang.org/x/crypto/bcrypt"
-	sql2 "database/sql"
+	"time"
 )
 
 type User struct {
@@ -44,18 +44,19 @@ func StoreUser(user User) (int64, error) {
 
 	//获取这个邮箱是否存在
 	_,err := GetUser(user.Email)
+	fmt.Println(err)
 
 	//如果错误不是没找到数据（那就是找到了数据）就返回不继续执行
-	if err != sql2.ErrNoRows {
+	if err != sql.ErrNoRows {
 		return 0,err
 	}
 
 	//插入数据
-	sql,_ := db.Prepare("INSERT INTO users(`name`,`email`,`password`,`created_at`,`updated_at`) VALUES (?,?,?,?,?)")
+	stmt,_ := db.Prepare("INSERT INTO users(`name`,`email`,`password`,`created_at`,`updated_at`) VALUES (?,?,?,?,?)")
 	now := time.Now().Format("2006-01-02 15:04:05")
 	passwordHashed,_ := bcrypt.GenerateFromPassword([]byte(user.Password),bcrypt.DefaultCost)
 
-	result,_ := sql.Exec(user.Name,user.Email,passwordHashed,now,now)
+	result,_ := stmt.Exec(user.Name,user.Email,passwordHashed,now,now)
 	id,err := result.LastInsertId()
 	if err != nil {
 		panic(err)
