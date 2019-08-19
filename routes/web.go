@@ -1,10 +1,11 @@
 package routes
 
 import (
-	"ginex/controllers/auth"
+	//"ginex/controllers/auth"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
+	"ginex/controllers/auth"
 )
 
 func Init() *gin.Engine {
@@ -15,11 +16,11 @@ func Init() *gin.Engine {
 
 	router.LoadHTMLGlob("views/**/*")
 
-	router.GET("/register",auth.ShowRegistrationForm)
-	router.POST("/register",auth.Register)
+	router.GET("/register",auth.RegisterController{}.ShowRegistrationForm)
+	router.POST("/register",auth.RegisterController{}.Register)
 
-	router.GET("/login",auth.ShowLoginForm)
-	router.POST("/login",auth.Login)
+	/*router.GET("/login",auth.ShowLoginForm)
+	router.POST("/login",auth.Login)*/
 
 
 	return router
