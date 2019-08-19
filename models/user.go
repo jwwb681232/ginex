@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-type User struct {
+type UserModel struct {
 	Id            int64
 	Name          string
 	Email         string
@@ -20,7 +20,7 @@ type User struct {
 }
 
 func Get() {
-	user := User{}
+	user := UserModel{}
 	/*db := database.Init()
 	row := db.QueryRow("SELECT * FROM users WHERE id = ?", 1)
 	err := row.Scan(&user.Id, &user.Name, &user.Email,&user.Password, &user.RememberToken, &user.CreatedAt, &user.UpdatedAt, &user.DeletedAt)
@@ -30,14 +30,14 @@ func Get() {
 	fmt.Println(user)
 }
 
-func GetUser(email string) (User,error) {
-	user := User{}
+func GetUser(email string) (UserModel,error) {
+	user := UserModel{}
 	row := database.DB.QueryRow("SELECT * FROM users WHERE email = ? LIMIT 1", email)
 	err := row.Scan(&user.Id, &user.Name, &user.Email,&user.Password, &user.RememberToken, &user.CreatedAt, &user.UpdatedAt, &user.DeletedAt)
 	return user,err
 }
 
-func StoreUser(user User) (int64, error) {
+func StoreUser(user UserModel) (int64, error) {
 	//获取这个邮箱是否存在
 	_,err := GetUser(user.Email)
 	fmt.Println(err)
