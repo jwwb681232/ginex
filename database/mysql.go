@@ -3,9 +3,15 @@ package database
 import (
 	"database/sql"
 	_ "github.com/go-sql-driver/mysql"
+	"ginex/config"
+	"fmt"
 )
 
-func Init() *sql.DB {
-	db, _ := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/gin-blog?parseTime=true")
-	return db
+var DB *sql.DB
+
+func init() {
+	c := config.DatabaseConfig()
+	fmt.Println(c)
+	DB, _ = sql.Open("mysql", fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", c.DbUsername, c.DbPassword, c.DbHost, c.DbPort, c.DbDatabase))
+
 }
