@@ -1,20 +1,21 @@
 package auth
 
 import (
-	"database/sql"
-	"ginex/models"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"ginex/helpers"
+	"gopkg.in/go-playground/validator.v9"
+	zhCn "github.com/go-playground/locales/zh"
+	zhTranslations "gopkg.in/go-playground/validator.v9/translations/zh"
+	"github.com/go-playground/universal-translator"
 )
 
 type RegisterController struct {}
 
 type RegisterForm struct {
-	Name                 string `form:"name" json:"name" binding:"required"`
-	Email                string `form:"email" json:"email" binding:"required"`
-	Password             string `form:"password" json:"password" binding:"required"`
-	PasswordConfirmation string `form:"password_confirmation" json:"password_confirmation" binding:"required"`
+	Name                 string `form:"name" json:"name" validate:"required"`
+	Email                string `form:"email" json:"email" validate:"required,email"`
+	Password             string `form:"password" json:"password" validate:"required"`
+	PasswordConfirmation string `form:"password_confirmation" json:"password_confirmation" validate:"required"`
 }
 
 func (RegisterController) ShowRegistrationForm(c *gin.Context) {
@@ -24,42 +25,27 @@ func (RegisterController) ShowRegistrationForm(c *gin.Context) {
 func (RegisterController) Register(c *gin.Context) {
 	var data RegisterForm
 	if err := c.Bind(&data); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
+		/*c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return*/
 	}
-	id,err := models.StoreUser(models.UserModel{Name:data.Name,Email:data.Email,Password:data.Password})
+	var uni *ut.UniversalTranslator
+	var validate *validator.Validate
 
-	if err != sql.ErrNoRows {
-		flash := helpers.Flash(c, map[string]interface{}{
-			"code":http.StatusConflict,
-			"message":[]string{"The email address already exists"},
-		})
-		c.HTML(http.StatusConflict,"auth/register.html",flash)
-		return
+	zh := zhCn.New()
+	uni = ut.New(zh,zh)
+
+	trans,_ := uni.GetTranslator("zh")
+
+	validate = validator.New()
+	zhTranslations.RegisterDefaultTranslations(validate,trans)
+
+	err := validate.Struct(&data)
+	if err != nil{
+		errs := err.(validator.ValidationErrors)
+
+		c.JSON(http.StatusOK,errs.Translate(trans))
+
+		//fmt.Println(errs.Translate(trans))
 	}
 
-	c.JSON(http.StatusOK, gin.H{
-		"id":id,
-	})
 }
-
-/*func ShowLoginForm(c *gin.Context) {
-	c.HTML(http.StatusOK, "auth/login.html", gin.H{"title": "Login Page"})
-}
-
-func Login(c *gin.Context) {
-	email := c.PostForm("email")
-	password := c.PostForm("password")
-
-	models.GetUser(email)
-
-	c.HTML(http.StatusBadRequest, "auth/postTest.html", gin.H{"title": "Login Post Test Page", "email": email, "password": password})
-}*/
-
-/*func ShowRegistrationFormAll(c *gin.Context) {
-	data := models.All()
-	c.JSON(http.StatusOK, gin.H{
-		"data": data,
-	})
-	//c.HTML(http.StatusOK,"auth/register.html",gin.H{"title":title})
-}*/
