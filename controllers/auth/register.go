@@ -3,15 +3,12 @@ package auth
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"gopkg.in/go-playground/validator.v9"
-	zhCn "github.com/go-playground/locales/zh"
-	zhTranslations "gopkg.in/go-playground/validator.v9/translations/zh"
-	"github.com/go-playground/universal-translator"
+	"ginex/helpers"
 )
 
 type RegisterController struct {}
 
-type RegisterForm struct {
+type registerForm struct {
 	Name                 string `form:"name" json:"name" validate:"required"`
 	Email                string `form:"email" json:"email" validate:"required,email"`
 	Password             string `form:"password" json:"password" validate:"required"`
@@ -23,12 +20,18 @@ func (RegisterController) ShowRegistrationForm(c *gin.Context) {
 }
 
 func (RegisterController) Register(c *gin.Context) {
-	var data RegisterForm
+	var data registerForm
 	if err := c.Bind(&data); err != nil {
 		/*c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return*/
 	}
-	var uni *ut.UniversalTranslator
+
+	message,err := helpers.Validate(&data)
+	if err != nil {
+		c.JSON(http.StatusOK,message)
+	}
+
+	/*var uni *ut.UniversalTranslator
 	var validate *validator.Validate
 
 	zh := zhCn.New()
@@ -46,6 +49,6 @@ func (RegisterController) Register(c *gin.Context) {
 		c.JSON(http.StatusOK,errs.Translate(trans))
 
 		//fmt.Println(errs.Translate(trans))
-	}
+	}*/
 
 }
