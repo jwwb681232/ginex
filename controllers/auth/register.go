@@ -26,9 +26,9 @@ func (RegisterController) Register(c *gin.Context) {
 		return*/
 	}
 
-	message,err := helpers.Validate(&data)
+	validateMessage,err := helpers.Validate(&data)
 	if err != nil {
-		c.JSON(http.StatusOK,message)
+		c.JSON(http.StatusOK,validateMessage)
 	}
 
 	/*var uni *ut.UniversalTranslator
