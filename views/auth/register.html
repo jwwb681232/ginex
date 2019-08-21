@@ -66,38 +66,41 @@
             <!-- end register-header -->
             <!-- begin register-content -->
             <div class="register-content">
-                {{ if ne .code 200 }}
-                <div class="alert alert-danger">
-                    <ul>
-                        {{ range $v := .message}}
-                            <li>{{ $v }}</li>
-                        {{end}}
-                    </ul>
-                </div>
-                {{end}}
                 <form action="/register" method="POST" class="margin-bottom-0">
                     <label class="control-label">Name</label>
                     <div class="row m-b-15">
                         <div class="col-md-12">
                             <input type="text" name="name" class="form-control" placeholder="User Name" />
+                        {{ if ne .code 200 }}
+                            <span class="ui-state-error-text">{{index .message "registerForm.Name"}}</span>
+                        {{end}}
                         </div>
                     </div>
                     <label class="control-label">Email</label>
                     <div class="row m-b-15">
                         <div class="col-md-12">
                             <input type="text" name="email" class="form-control" placeholder="Email address"/>
+                        {{ if ne .code 200 }}
+                            <span class="ui-state-error-text">{{index .message "registerForm.Email"}}</span>
+                        {{end}}
                         </div>
                     </div>
                     <label class="control-label">Password</label>
                     <div class="row m-b-15">
                         <div class="col-md-12">
                             <input type="password" name="password" class="form-control" placeholder="Password" />
+                        {{ if ne .code 200 }}
+                            <span class="ui-state-error-text">{{index .message "registerForm.Password"}}</span>
+                        {{end}}
                         </div>
                     </div>
                     <label class="control-label">Password Confirmation</label>
                     <div class="row m-b-15">
                         <div class="col-md-12">
                             <input type="password" name="password_confirmation" class="form-control" placeholder="Password Confirmation" />
+                        {{ if ne .code 200 }}
+                            <span class="ui-state-error-text">{{index .message "registerForm.PasswordConfirmation"}}</span>
+                        {{end}}
                         </div>
                     </div>
                     <div class="register-buttons">
