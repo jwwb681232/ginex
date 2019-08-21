@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"ginex/helpers"
+	//"fmt"
 )
 
 type RegisterController struct {}
@@ -28,7 +29,9 @@ func (RegisterController) Register(c *gin.Context) {
 
 	validateMessage,err := helpers.Validate(&data)
 	if err != nil {
-		c.JSON(http.StatusOK,validateMessage)
+		//fmt.Println(validateMessage["registerForm.Name"])
+		c.HTML(http.StatusOK,"auth/register.html",gin.H{"code":http.StatusFound,"message":validateMessage})
+		//c.JSON(http.StatusOK,gin.H{"code":http.StatusFound,"message":validateMessage})
 	}
 
 	/*var uni *ut.UniversalTranslator
