@@ -13,7 +13,7 @@ type registerForm struct {
 	Name                 string `form:"name" json:"name" validate:"required"`
 	Email                string `form:"email" json:"email" validate:"required,email"`
 	Password             string `form:"password" json:"password" validate:"required"`
-	PasswordConfirmation string `form:"password_confirmation" json:"password_confirmation" validate:"required"`
+	PasswordConfirmation string `form:"password_confirmation" json:"password_confirmation" validate:"required,eqfield=password"`
 }
 
 func (RegisterController) ShowRegistrationForm(c *gin.Context) {
