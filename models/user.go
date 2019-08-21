@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-type User struct {
+type UserModel struct {
 	Id            int64
 	Name          string
 	Email         string
@@ -20,7 +20,7 @@ type User struct {
 }
 
 func Get() {
-	user := User{}
+	user := UserModel{}
 	/*db := database.Init()
 	row := db.QueryRow("SELECT * FROM users WHERE id = ?", 1)
 	err := row.Scan(&user.Id, &user.Name, &user.Email,&user.Password, &user.RememberToken, &user.CreatedAt, &user.UpdatedAt, &user.DeletedAt)
@@ -30,18 +30,14 @@ func Get() {
 	fmt.Println(user)
 }
 
-func GetUser(email string) (User,error) {
-	user := User{}
-	db := database.Init()
-	row := db.QueryRow("SELECT * FROM users WHERE email = ? LIMIT 1", email)
+func GetUser(email string) (UserModel,error) {
+	user := UserModel{}
+	row := database.DB.QueryRow("SELECT * FROM users WHERE email = ? LIMIT 1", email)
 	err := row.Scan(&user.Id, &user.Name, &user.Email,&user.Password, &user.RememberToken, &user.CreatedAt, &user.UpdatedAt, &user.DeletedAt)
 	return user,err
 }
 
-func StoreUser(user User) (int64, error) {
-	//初始化数据库
-	db := database.Init()
-
+func StoreUser(user UserModel) (int64, error) {
 	//获取这个邮箱是否存在
 	_,err := GetUser(user.Email)
 	fmt.Println(err)
@@ -52,7 +48,7 @@ func StoreUser(user User) (int64, error) {
 	}
 
 	//插入数据
-	stmt,_ := db.Prepare("INSERT INTO users(`name`,`email`,`password`,`created_at`,`updated_at`) VALUES (?,?,?,?,?)")
+	stmt,_ := database.DB.Prepare("INSERT INTO users(`name`,`email`,`password`,`created_at`,`updated_at`) VALUES (?,?,?,?,?)")
 	now := time.Now().Format("2006-01-02 15:04:05")
 	passwordHashed,_ := bcrypt.GenerateFromPassword([]byte(user.Password),bcrypt.DefaultCost)
 
