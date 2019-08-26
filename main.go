@@ -7,5 +7,5 @@ import (
 func main() {
 	router := routes.Init()
 	router.Static("/resources","./resources")
-	router.Run()
+	router.Run(":8080")
 }

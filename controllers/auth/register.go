@@ -3,8 +3,7 @@ package auth
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"ginex/helpers"
-	//"fmt"
+	userModel "ginex/models/user"
 )
 
 type RegisterController struct {}
@@ -12,7 +11,7 @@ type RegisterController struct {}
 type registerForm struct {
 	Name                 string `form:"name" json:"name" validate:"required"`
 	Email                string `form:"email" json:"email" validate:"required,email"`
-	Password             string `form:"password" json:"password" validate:"required"`
+	Password             string `form:"password" json:"password" validate:"required,min=6,max=20"`
 	PasswordConfirmation string `form:"password_confirmation" json:"password_confirmation" validate:"required,eqfield=password"`
 }
 
@@ -22,36 +21,19 @@ func (RegisterController) ShowRegistrationForm(c *gin.Context) {
 
 func (RegisterController) Register(c *gin.Context) {
 	var data registerForm
-	if err := c.Bind(&data); err != nil {
-		/*c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return*/
-	}
-
-	validateMessage,err := helpers.Validate(&data)
+	c.Bind(&data)
+	/*validateMessage,err := helpers.Validate(&data)
 	if err != nil {
-		//fmt.Println(validateMessage["registerForm.Name"])
-		c.HTML(http.StatusOK,"auth/register.html",gin.H{"code":http.StatusFound,"message":validateMessage})
-		//c.JSON(http.StatusOK,gin.H{"code":http.StatusFound,"message":validateMessage})
-	}
-
-	/*var uni *ut.UniversalTranslator
-	var validate *validator.Validate
-
-	zh := zhCn.New()
-	uni = ut.New(zh,zh)
-
-	trans,_ := uni.GetTranslator("zh")
-
-	validate = validator.New()
-	zhTranslations.RegisterDefaultTranslations(validate,trans)
-
-	err := validate.Struct(&data)
-	if err != nil{
-		errs := err.(validator.ValidationErrors)
-
-		c.JSON(http.StatusOK,errs.Translate(trans))
-
-		//fmt.Println(errs.Translate(trans))
+		c.HTML(http.StatusOK,"auth/register.html",gin.H{"code":http.StatusFound,"message":validateMessage,"data":data})
 	}*/
 
+	userData,err := userModel.User{}.WhereEmail(&data.Email)
+	if err != nil {
+		c.JSON(http.StatusOK,gin.H{"error":err})
+		return
+	}
+
+	c.JSON(http.StatusOK,gin.H{"data":userData})
+
+	return
 }
