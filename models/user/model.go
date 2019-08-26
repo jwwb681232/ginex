@@ -1,3 +1,4 @@
+/*
 package user
 
 import (
@@ -31,4 +32,31 @@ func GetOne(c map[string]interface{},f []string) (User,error) {
 		return user,err
 	}
 	return user,err
+}
+*/
+package user
+
+import (
+	"github.com/jinzhu/gorm"
+	"ginex/database"
+)
+
+type User struct {
+	gorm.Model
+	Name          string  `gorm:"column:name"`
+	Email         string  `gorm:"column:email"`
+	Password      string  `gorm:"column:password"`
+	RememberToken *string `gorm:"column:remember_token"`
+}
+
+func (User) TableName() string {
+	return "users"
+}
+
+func (User) WhereEmail(email *string) (User,bool) {
+	var userData User
+	if err := database.Db.Where("email = ?", email).First(&userData).RecordNotFound();err != false {
+		return userData,err
+	}
+	return userData,false
 }
