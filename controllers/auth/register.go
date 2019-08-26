@@ -3,8 +3,7 @@ package auth
 import (
 	"github.com/gin-gonic/gin"
 	"net/http"
-	//"ginex/helpers"
-	"ginex/models/user"
+	userModel "ginex/models/user"
 )
 
 type RegisterController struct {}
@@ -28,18 +27,13 @@ func (RegisterController) Register(c *gin.Context) {
 		c.HTML(http.StatusOK,"auth/register.html",gin.H{"code":http.StatusFound,"message":validateMessage,"data":data})
 	}*/
 
-	condition := map[string]interface{}{
-		"name":"王萧",
-		"email":"497657341@qq.com",
-	}
-	userData,err := user.GetOne(condition,[]string{"*"})
+	userData,err := userModel.User{}.WhereEmail(&data.Email)
 	if err != nil {
 		c.JSON(http.StatusOK,gin.H{"error":err})
+		return
 	}
 
 	c.JSON(http.StatusOK,gin.H{"data":userData})
 
-
-
-
+	return
 }
