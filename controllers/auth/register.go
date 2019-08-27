@@ -43,7 +43,11 @@ func (RegisterController) Register(c *gin.Context) {
 		Password:string(hash),
 	}
 
-	userModel.User{}.CreateUser(createUser)
+	result := userModel.User{}.CreateUser(createUser)
+	if result.Error != nil {
+		c.JSON(http.StatusBadRequest,result.Error)
+		return
+	}
 
 	c.JSON(http.StatusOK, userData)
 
