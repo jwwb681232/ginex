@@ -53,10 +53,18 @@ func (User) TableName() string {
 	return "users"
 }
 
-func (User) WhereEmail(email *string) (User,bool) {
+/*func (User) WhereEmail(email *string) (User,bool) {
 	var userData User
 	if err := database.Db.Where("email = ?", email).First(&userData).RecordNotFound();err != false {
 		return userData,err
 	}
 	return userData,false
+}*/
+
+func (User) WhereEmail(email *string) (User, bool) {
+	var userData User
+	var notFound bool
+
+	notFound = database.Db.Where("email = ?", email).First(&userData).RecordNotFound()
+	return userData, notFound
 }
