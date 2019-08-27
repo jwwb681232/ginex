@@ -1,7 +1,6 @@
 package routes
 
 import (
-	//"ginex/controllers/auth"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
@@ -19,8 +18,8 @@ func Init() *gin.Engine {
 	router.GET("/register",auth.RegisterController{}.ShowRegistrationForm)
 	router.POST("/register",auth.RegisterController{}.Register)
 
-	/*router.GET("/login",auth.ShowLoginForm)
-	router.POST("/login",auth.Login)*/
+	router.GET("/login",auth.LoginController{}.ShowLoginForm)
+	router.POST("/login",auth.LoginController{}.Login)
 
 
 	return router
