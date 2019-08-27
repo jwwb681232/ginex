@@ -29,5 +29,5 @@ var Db *gorm.DB
 
 func init() {
 	c := config.DatabaseConfig()
-	Db, _ = gorm.Open(c.DbType, fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true", c.DbUsername, c.DbPassword, c.DbHost, c.DbPort, c.DbDatabase))
+	Db, _ = gorm.Open(c.DbType, fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?parseTime=true&loc=Local", c.DbUsername, c.DbPassword, c.DbHost, c.DbPort, c.DbDatabase))
 }

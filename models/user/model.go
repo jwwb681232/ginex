@@ -39,6 +39,7 @@ package user
 import (
 	"github.com/jinzhu/gorm"
 	"ginex/database"
+	"fmt"
 )
 
 type User struct {
@@ -67,4 +68,9 @@ func (User) WhereEmail(email *string) (User, bool) {
 
 	notFound = database.Db.Where("email = ?", email).First(&userData).RecordNotFound()
 	return userData, notFound
+}
+
+func (User) CreateUser(u User) {
+	res := database.Db.Create(&u)
+	fmt.Println(res)
 }

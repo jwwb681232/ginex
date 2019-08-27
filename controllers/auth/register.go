@@ -1,11 +1,11 @@
 package auth
 
 import (
-	//_ "gopkg.in/go-playground/validator.v9"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	userModel "ginex/models/user"
 	"ginex/helpers"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type RegisterController struct {}
@@ -24,19 +24,28 @@ func (RegisterController) ShowRegistrationForm(c *gin.Context) {
 func (RegisterController) Register(c *gin.Context) {
 	var data registerForm
 	c.Bind(&data)
-	validateMessage,err := helpers.Validate(&data)
+	validateMessage, err := helpers.Validate(&data)
 	if err != nil {
-		c.HTML(http.StatusBadRequest,"auth/register.html",gin.H{"code":http.StatusFound,"message":validateMessage,"data":data})
+		c.HTML(http.StatusBadRequest, "auth/register.html", gin.H{"code": http.StatusFound, "message": validateMessage, "data": data})
 		return
 	}
 
-	userData ,notFound := userModel.User{}.WhereEmail(&data.Email)
+	userData, notFound := userModel.User{}.WhereEmail(&data.Email)
 	if !notFound {
-		c.HTML(http.StatusBadRequest,"auth/register.html",gin.H{"code":http.StatusFound,"message":map[string]string{"registerForm.Email":"邮箱已经存在"},"data":data})
+		c.HTML(http.StatusBadRequest, "auth/register.html", gin.H{"code": http.StatusFound, "message": map[string]string{"registerForm.Email": "邮箱已经存在"}, "data": data,}, )
 		return
 	}
 
-	c.JSON(http.StatusOK,userData)
+	hash, _ := bcrypt.GenerateFromPassword([]byte(data.Password), bcrypt.DefaultCost)
+	createUser := userModel.User{
+		Name:data.Name,
+		Email:data.Email,
+		Password:string(hash),
+	}
+
+	userModel.User{}.CreateUser(createUser)
+
+	c.JSON(http.StatusOK, userData)
 
 	return
 }
