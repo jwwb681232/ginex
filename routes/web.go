@@ -5,6 +5,7 @@ import (
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"ginex/controllers/auth"
+	"fmt"
 )
 
 func Init() *gin.Engine {
@@ -12,6 +13,7 @@ func Init() *gin.Engine {
 
 	store := cookie.NewStore([]byte("secret"))
 	router.Use(sessions.Sessions("mysession",store))
+	router.Use(AuthMiddleware())
 
 	router.LoadHTMLGlob("views/**/*")
 
@@ -23,4 +25,11 @@ func Init() *gin.Engine {
 
 
 	return router
+}
+
+func AuthMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		fmt.Println("Middleware")
+		c.Next()
+	}
 }
