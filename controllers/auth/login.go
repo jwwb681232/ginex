@@ -6,6 +6,9 @@ import (
 	"ginex/helpers"
 	userModel "ginex/models/user"
 	"golang.org/x/crypto/bcrypt"
+	"github.com/gin-contrib/sessions"
+	"github.com/satori/go.uuid"
+	"fmt"
 )
 
 type LoginController struct {
@@ -43,3 +46,23 @@ func (LoginController) Login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"code":http.StatusOK,"message":make(map[string]string),"data":userData})
 	return
 }
+
+func (LoginController) Set(c *gin.Context)  {
+	sessionToken,_ := uuid.NewV4()
+	//d6db0562-42c1-4bb2-b73e-988357fa0e6d
+	session := sessions.Default(c)
+	session.Set(sessionToken.String(),"wangxiao")
+	session.Save()//important
+
+	c.SetCookie("ginex_session",sessionToken.String(),0,"/","localhost",false,true)
+}
+
+func (LoginController) Get(c *gin.Context)  {
+	sessionToken, _ := c.Cookie("ginex_session")
+	session := sessions.Default(c)
+
+	value := session.Get(sessionToken)
+
+	c.JSON(http.StatusOK,value)
+}
+
