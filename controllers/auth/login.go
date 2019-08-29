@@ -1,14 +1,14 @@
 package auth
 
 import (
-	"github.com/gin-gonic/gin"
-	"net/http"
+	"fmt"
 	"ginex/helpers"
 	userModel "ginex/models/user"
-	"golang.org/x/crypto/bcrypt"
 	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
 	"github.com/satori/go.uuid"
-	"fmt"
+	"golang.org/x/crypto/bcrypt"
+	"net/http"
 )
 
 type LoginController struct {
@@ -51,7 +51,7 @@ func (LoginController) Set(c *gin.Context)  {
 	sessionToken,_ := uuid.NewV4()
 	//d6db0562-42c1-4bb2-b73e-988357fa0e6d
 	session := sessions.Default(c)
-	session.Set(sessionToken.String(),"wangxiao")
+	session.Set(sessionToken.String(),map[string]string{"name":"cai xu kun"})
 	session.Save()//important
 
 	c.SetCookie("ginex_session",sessionToken.String(),0,"/","localhost",false,true)
@@ -59,10 +59,13 @@ func (LoginController) Set(c *gin.Context)  {
 
 func (LoginController) Get(c *gin.Context)  {
 	sessionToken, _ := c.Cookie("ginex_session")
+	fmt.Println(sessionToken)
 	session := sessions.Default(c)
 
 	value := session.Get(sessionToken)
-
+	/*for k,v :=range c.Request.Header {
+		fmt.Println(k,v)
+	}*/
 	c.JSON(http.StatusOK,value)
 }
 
