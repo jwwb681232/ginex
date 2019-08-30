@@ -1,13 +1,16 @@
 package middlewares
 
 import (
-	"github.com/gin-gonic/gin"
 	"fmt"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
 )
 
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		fmt.Println("middleware auth")
-		c.Next()
+		sessionToken, _ := c.Cookie("ginex_session")
+		session := sessions.Default(c)
+		value := session.Get(sessionToken)
+		fmt.Println(value)
 	}
 }
