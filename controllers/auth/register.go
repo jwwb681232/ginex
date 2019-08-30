@@ -23,7 +23,7 @@ func (RegisterController) ShowRegistrationForm(c *gin.Context) {
 
 func (RegisterController) Register(c *gin.Context) {
 	var data registerForm
-	c.Bind(&data)
+	_ = c.Bind(&data)
 	validateMessage, err := helpers.Validate(&data)
 	if err != nil {
 		c.HTML(http.StatusBadRequest, "auth/register.html", gin.H{"code": http.StatusFound, "message": validateMessage, "data": data})

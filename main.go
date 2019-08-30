@@ -1,11 +1,14 @@
 package main
 
 import (
+	"encoding/gob"
+	"ginex/models/user"
 	"ginex/routes"
 )
 
 func main() {
 	router := routes.Init()
+	gob.Register(user.User{})
 	router.Static("/resources","./resources")
-	router.Run(":8080")
+	_ =router.Run(":8080")
 }

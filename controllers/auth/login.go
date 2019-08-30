@@ -47,9 +47,10 @@ func (LoginController) Login(c *gin.Context) {
 	session.Set(sessionToken,userData)
 	_ = session.Save()
 
-
-	c.JSON(http.StatusOK, gin.H{"code":http.StatusOK,"message":make(map[string]string),"data":userData})
+	c.Redirect(http.StatusMovedPermanently,"/dashboard")
 	return
+	/*c.JSON(http.StatusOK, gin.H{"code":http.StatusOK,"message":make(map[string]string),"data":userData})
+	return*/
 }
 
 /*func (LoginController) Set(c *gin.Context)  {

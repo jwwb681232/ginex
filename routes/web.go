@@ -11,21 +11,21 @@ import (
 
 func Init() *gin.Engine {
 	router := gin.Default()
+	router.LoadHTMLGlob("views/**/*")
 
 	store := cookie.NewStore([]byte("secret"))
 	router.Use(sessions.Sessions("mysession",store))
-	router.Use(middlewares.Auth())
-	{
-		router.GET("/dashboard",controllers.DashboardController{}.Index)
-	}
-
-	router.LoadHTMLGlob("views/**/*")
 
 	router.GET("/register",auth.RegisterController{}.ShowRegistrationForm)
 	router.POST("/register",auth.RegisterController{}.Register)
 
 	router.GET("/login",auth.LoginController{}.ShowLoginForm)
 	router.POST("/login",auth.LoginController{}.Login)
+
+	router.Use(middlewares.Auth())
+	{
+		router.GET("/dashboard",controllers.DashboardController{}.Index)
+	}
 
 	//router.GET("/set-cookie",auth.LoginController{}.Set)
 	//router.GET("/get-cookie",auth.LoginController{}.Get)
