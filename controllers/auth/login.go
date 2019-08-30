@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"fmt"
 	"ginex/helpers"
 	userModel "ginex/models/user"
 	"github.com/gin-contrib/sessions"
@@ -25,7 +24,7 @@ func (LoginController) ShowLoginForm(c *gin.Context) {
 
 func (LoginController) Login(c *gin.Context) {
 	var postData loginForm
-	c.Bind(&postData)
+	_ = c.Bind(&postData)
 	validateMessage, err := helpers.Validate(&postData)
 	if err != nil {
 		c.HTML(http.StatusBadRequest, "auth/login.html", gin.H{"code": http.StatusFound, "message": validateMessage, "data": postData})
@@ -43,29 +42,34 @@ func (LoginController) Login(c *gin.Context) {
 		return
 	}
 
+	sessionToken,_ := uuid.NewV4()
+	session := sessions.Default(c)
+	session.Set(sessionToken,userData)
+	_ = session.Save()
+
+
 	c.JSON(http.StatusOK, gin.H{"code":http.StatusOK,"message":make(map[string]string),"data":userData})
 	return
 }
 
-func (LoginController) Set(c *gin.Context)  {
+/*func (LoginController) Set(c *gin.Context)  {
 	sessionToken,_ := uuid.NewV4()
-	//d6db0562-42c1-4bb2-b73e-988357fa0e6d
+
 	session := sessions.Default(c)
-	session.Set(sessionToken.String(),map[string]string{"name":"cai xu kun"})
-	session.Save()//important
+	//session.Set(sessionToken.String(),map[string]string{"name":"cai xu kun"})
+	session.Set("wangxiao",map[string]string{"name":"cai xu kun"})
+	_ = session.Save()
 
 	c.SetCookie("ginex_session",sessionToken.String(),0,"/","localhost",false,true)
 }
 
 func (LoginController) Get(c *gin.Context)  {
-	sessionToken, _ := c.Cookie("ginex_session")
-	fmt.Println(sessionToken)
+	//sessionToken, _ := c.Cookie("ginex_session")
+
 	session := sessions.Default(c)
 
-	value := session.Get(sessionToken)
-	/*for k,v :=range c.Request.Header {
-		fmt.Println(k,v)
-	}*/
-	c.JSON(http.StatusOK,value)
-}
+	value := session.Get("wangxiao")
+
+	c.JSON(http.StatusOK,gin.H{"data":value})
+}*/
 

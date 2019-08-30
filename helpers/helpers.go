@@ -13,7 +13,7 @@ func Flash(context *gin.Context,value interface{}) interface{} {
 	session := sessions.Default(context)
 	session.AddFlash(value)
 	flash := session.Flashes()[0]
-	session.Save()
+	_ = session.Save()
 	return flash
 }
 
