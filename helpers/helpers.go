@@ -13,7 +13,7 @@ func Flash(context *gin.Context,value interface{}) interface{} {
 	session := sessions.Default(context)
 	session.AddFlash(value)
 	flash := session.Flashes()[0]
-	session.Save()
+	_ = session.Save()
 	return flash
 }
 
@@ -27,7 +27,7 @@ func Validate(s interface{}) (map[string]string,error)  {
 	trans,_ := uni.GetTranslator("zh")
 
 	validate = validator.New()
-	zhTranslations.RegisterDefaultTranslations(validate,trans)
+	_ = zhTranslations.RegisterDefaultTranslations(validate, trans)
 
 	err := validate.Struct(s)
 	if err != nil {
