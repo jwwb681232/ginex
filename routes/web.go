@@ -13,8 +13,7 @@ func Init() *gin.Engine {
 	router := gin.Default()
 	router.LoadHTMLGlob("views/**/*")
 
-	store := cookie.NewStore([]byte("secret"))
-	router.Use(sessions.Sessions("mysession",store))
+	router.Use(sessions.Sessions("ginex_session",cookie.NewStore([]byte("secret"))))
 
 	router.GET("/register",auth.RegisterController{}.ShowRegistrationForm)
 	router.POST("/register",auth.RegisterController{}.Register)

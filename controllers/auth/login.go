@@ -5,7 +5,7 @@ import (
 	userModel "ginex/models/user"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"github.com/satori/go.uuid"
+	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 )
@@ -42,10 +42,18 @@ func (LoginController) Login(c *gin.Context) {
 		return
 	}
 
-	sessionToken,_ := uuid.NewV4()
+	sessionKey ,_ := uuid.NewV4()
+	c.SetCookie("ginex_session",sessionKey.String(),60*60*24,"/","localhost",true,true)
 	session := sessions.Default(c)
-	session.Set(sessionToken,userData)
+	session.Set(sessionKey.String(),userData.ID)
 	_ = session.Save()
+
+	/*sessionToken,_ := uuid.NewV4()
+	c.SetCookie("ginex_session",sessionToken.String(),0,"/","localhost",false,true)
+	session := sessions.Default(c)
+	session.Set(sessionToken.String(),userData)
+	_ = session.Save()
+	fmt.Println(sessionToken.String())*/
 
 	c.Redirect(http.StatusMovedPermanently,"/dashboard")
 	return
