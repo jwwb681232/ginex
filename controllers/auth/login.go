@@ -3,9 +3,7 @@ package auth
 import (
 	"ginex/helpers"
 	userModel "ginex/models/user"
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
 )
@@ -42,18 +40,20 @@ func (LoginController) Login(c *gin.Context) {
 		return
 	}
 
-	sessionKey ,_ := uuid.NewV4()
-	c.SetCookie("ginex_session",sessionKey.String(),60*60*24,"/","localhost",true,true)
-	session := sessions.Default(c)
-	session.Set(sessionKey.String(),userData.ID)
-	_ = session.Save()
+	//sessionKey ,_ := uuid.NewV4()
+	//c.SetCookie("ginex_session",sessionKey.String(),60*60*24,"/","localhost",true,true)
+	//session := sessions.Default(c)
+	//session.Set(sessionKey.String(),userData.ID)
+	//_ = session.Save()
 
-	/*sessionToken,_ := uuid.NewV4()
-	c.SetCookie("ginex_session",sessionToken.String(),0,"/","localhost",false,true)
-	session := sessions.Default(c)
-	session.Set(sessionToken.String(),userData)
-	_ = session.Save()
-	fmt.Println(sessionToken.String())*/
+	helpers.SetUserSession(c,userData.ID)
+
+	//sessionKey := "ginex_session_key"
+	//c.SetCookie("ginex_session",sessionKey,60*60*24,"/","localhost",true,true)
+	//session := sessions.Default(c)
+	//session.Set(sessionKey,userData.ID)
+	//_ = session.Save()
+
 
 	c.Redirect(http.StatusMovedPermanently,"/dashboard")
 	return

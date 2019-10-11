@@ -3,9 +3,9 @@ package helpers
 import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	zhCn "github.com/go-playground/locales/zh"
 	"github.com/go-playground/universal-translator"
 	"gopkg.in/go-playground/validator.v9"
-	zhCn "github.com/go-playground/locales/zh"
 	zhTranslations "gopkg.in/go-playground/validator.v9/translations/zh"
 )
 
@@ -35,4 +35,16 @@ func Validate(s interface{}) (map[string]string,error)  {
 		return errs.Translate(trans),err
 	}
 	return make(map[string]string),err
+}
+
+func SetUserSession(c *gin.Context,ID uint) {
+	//sessionKey := "ginex_session_key"
+	//c.SetCookie("ginex_session",sessionKey,60*60*24,"/","localhost",true,true)
+	//session := sessions.Default(c)
+	//session.Set(sessionKey,ID)
+	//_ = session.Save()
+
+	session := sessions.Default(c)
+	session.Set("ginex_session_key",ID)
+	_ = session.Save()
 }

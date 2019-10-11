@@ -21,9 +21,11 @@ func Init() *gin.Engine {
 	router.GET("/login",auth.LoginController{}.ShowLoginForm)
 	router.POST("/login",auth.LoginController{}.Login)
 
-	router.Use(middlewares.Auth())
+	authorized := router.Group("/")
+
+	authorized.Use(middlewares.Auth())
 	{
-		router.GET("/dashboard",controllers.DashboardController{}.Index)
+		router.GET("/dashboard",middlewares.Auth(),controllers.DashboardController{}.Index)
 	}
 
 	//router.GET("/set-cookie",auth.LoginController{}.Set)
