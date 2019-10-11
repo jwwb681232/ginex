@@ -45,6 +45,9 @@ func SetUserSession(c *gin.Context,ID uint) {
 	//_ = session.Save()
 
 	session := sessions.Default(c)
+	session.Options(sessions.Options{
+		MaxAge:   60*60*2,
+	})
 	session.Set("ginex_session_key",ID)
 	_ = session.Save()
 }
