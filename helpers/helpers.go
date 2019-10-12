@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"ginex/models/user"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	zhCn "github.com/go-playground/locales/zh"
@@ -37,7 +38,7 @@ func Validate(s interface{}) (map[string]string,error)  {
 	return make(map[string]string),err
 }
 
-func SetUserSession(c *gin.Context,ID uint) {
+func SetUserSession(c *gin.Context,user user.User) {
 	//sessionKey := "ginex_session_key"
 	//c.SetCookie("ginex_session",sessionKey,60*60*24,"/","localhost",true,true)
 	//session := sessions.Default(c)
@@ -48,6 +49,7 @@ func SetUserSession(c *gin.Context,ID uint) {
 	session.Options(sessions.Options{
 		MaxAge:   60*60*2,
 	})
-	session.Set("ginex_session_key",ID)
+	//jsonData,_ := json.Marshal(user)
+	session.Set("ginex_session_key",user)
 	_ = session.Save()
 }
