@@ -2,7 +2,7 @@ package auth
 
 import (
 	"ginex/helpers"
-	userModel "ginex/models/user"
+	"ginex/models"
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
 	"net/http"
@@ -29,7 +29,7 @@ func (LoginController) Login(c *gin.Context) {
 		return
 	}
 
-	userData, notFound := userModel.User{}.WhereEmail(&postData.Email)
+	userData, notFound := models.User{}.WhereEmail(&postData.Email)
 	if notFound {
 		c.HTML(http.StatusBadRequest, "auth/login.html", gin.H{"code": http.StatusFound, "message": map[string]string{"loginForm.Email": "该账号不存在"}, "data": postData} )
 		return

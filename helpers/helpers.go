@@ -1,7 +1,7 @@
 package helpers
 
 import (
-	"ginex/models/user"
+	"ginex/models"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	zhCn "github.com/go-playground/locales/zh"
@@ -38,7 +38,7 @@ func Validate(s interface{}) (map[string]string,error)  {
 	return make(map[string]string),err
 }
 
-func SetUserSession(c *gin.Context,user user.User) {
+func SetUserSession(c *gin.Context,user models.User) {
 	//sessionKey := "ginex_session_key"
 	//c.SetCookie("ginex_session",sessionKey,60*60*24,"/","localhost",true,true)
 	//session := sessions.Default(c)
