@@ -46,7 +46,7 @@ func (LoginController) Login(c *gin.Context) {
 	//session.Set(sessionKey.String(),userData.ID)
 	//_ = session.Save()
 
-	helpers.SetUserSession(c,userData.ID)
+	helpers.SetUserSession(c,userData)
 
 	//sessionKey := "ginex_session_key"
 	//c.SetCookie("ginex_session",sessionKey,60*60*24,"/","localhost",true,true)

@@ -1,6 +1,7 @@
 package middlewares
 
 import (
+	"ginex/models/user"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -10,9 +11,10 @@ func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
 
 		session := sessions.Default(c)
-		value := session.Get("ginex_session_key")
+		var value user.User
+		value = session.Get("ginex_session_key").(user.User)
 
-		if value != nil  {
+		if value.ID != 0  {
 			c.Next()
 			return
 		}
