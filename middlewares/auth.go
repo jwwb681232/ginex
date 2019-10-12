@@ -1,16 +1,24 @@
 package middlewares
 
 import (
-	"fmt"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
+	"net/http"
 )
 
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		sessionToken, _ := c.Cookie("ginex_session")
+
 		session := sessions.Default(c)
-		value := session.Get(sessionToken)
-		fmt.Println(value)
+		value := session.Get("ginex_session_key")
+
+		if value != nil  {
+			c.Next()
+			return
+		}
+
+		c.Abort()
+		c.Redirect(http.StatusMovedPermanently,"/login")
+		return
 	}
 }
