@@ -55,7 +55,8 @@ func (LoginController) Login(c *gin.Context) {
 	//_ = session.Save()
 
 
-	c.Redirect(http.StatusMovedPermanently,"/dashboard")
+	//c.Redirect(http.StatusMovedPermanently,"/dashboard")
+	c.Redirect(http.StatusMovedPermanently,"/index")
 	return
 	/*c.JSON(http.StatusOK, gin.H{"code":http.StatusOK,"message":make(map[string]string),"data":userData})
 	return*/

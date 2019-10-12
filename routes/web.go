@@ -25,6 +25,7 @@ func Init() *gin.Engine {
 
 	authorized.Use(middlewares.Auth())
 	{
+		authorized.GET("/index",controllers.IndexController{}.Index)
 		authorized.GET("/dashboard",controllers.DashboardController{}.Index)
 	}
 
