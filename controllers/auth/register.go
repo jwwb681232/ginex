@@ -1,11 +1,11 @@
 package auth
 
 import (
-	"github.com/gin-gonic/gin"
-	"net/http"
-	userModel "ginex/models/user"
 	"ginex/helpers"
+	"ginex/models"
+	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
+	"net/http"
 )
 
 type RegisterController struct {}
@@ -30,20 +30,20 @@ func (RegisterController) Register(c *gin.Context) {
 		return
 	}
 
-	userData, notFound := userModel.User{}.WhereEmail(&data.Email)
+	userData, notFound := models.User{}.WhereEmail(&data.Email)
 	if !notFound {
 		c.HTML(http.StatusBadRequest, "auth/register.html", gin.H{"code": http.StatusFound, "message": map[string]string{"registerForm.Email": "邮箱已经存在"}, "data": data,}, )
 		return
 	}
 
 	hash, _ := bcrypt.GenerateFromPassword([]byte(data.Password), bcrypt.DefaultCost)
-	createUser := userModel.User{
+	createUser := models.User{
 		Name:data.Name,
 		Email:data.Email,
 		Password:string(hash),
 	}
 
-	result := userModel.User{}.CreateUser(createUser)
+	result := models.User{}.CreateUser(createUser)
 	if result.Error != nil {
 		c.JSON(http.StatusBadRequest,result.Error)
 		return
