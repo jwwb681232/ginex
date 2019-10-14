@@ -26,7 +26,7 @@ func Init() *gin.Engine {
 	{
 		authorized.GET("/index",controllers.IndexController{}.Index)
 		authorized.GET("/dashboard",controllers.DashboardController{}.Index)
-		authorized.GET("/categories",controllers.CategoryController{}.Index)
+		authorized.GET("/home-cook/categories",controllers.CategoryController{}.Index)
 	}
 
 
