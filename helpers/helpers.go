@@ -10,7 +10,7 @@ import (
 	zhTranslations "gopkg.in/go-playground/validator.v9/translations/zh"
 )
 
-func Flash(context *gin.Context,value interface{}) interface{} {
+func Flash(context *gin.Context, value interface{}) interface{} {
 	session := sessions.Default(context)
 	session.AddFlash(value)
 	flash := session.Flashes()[0]
@@ -18,14 +18,14 @@ func Flash(context *gin.Context,value interface{}) interface{} {
 	return flash
 }
 
-func Validate(s interface{}) (map[string]string,error)  {
+func Validate(s interface{}) (map[string]string, error) {
 	var uni *ut.UniversalTranslator
 	var validate *validator.Validate
 
 	zh := zhCn.New()
-	uni = ut.New(zh,zh)
+	uni = ut.New(zh, zh)
 
-	trans,_ := uni.GetTranslator("zh")
+	trans, _ := uni.GetTranslator("zh")
 
 	validate = validator.New()
 	_ = zhTranslations.RegisterDefaultTranslations(validate, trans)
@@ -33,12 +33,12 @@ func Validate(s interface{}) (map[string]string,error)  {
 	err := validate.Struct(s)
 	if err != nil {
 		errs := err.(validator.ValidationErrors)
-		return errs.Translate(trans),err
+		return errs.Translate(trans), err
 	}
-	return make(map[string]string),err
+	return make(map[string]string), err
 }
 
-func SetUserSession(c *gin.Context,user models.User) {
+func SetUserSession(c *gin.Context, user models.User) {
 	//sessionKey := "ginex_session_key"
 	//c.SetCookie("ginex_session",sessionKey,60*60*24,"/","localhost",true,true)
 	//session := sessions.Default(c)
@@ -47,9 +47,10 @@ func SetUserSession(c *gin.Context,user models.User) {
 
 	session := sessions.Default(c)
 	session.Options(sessions.Options{
-		MaxAge:   60*60*2,
+		Path:   "/",
+		MaxAge: 60 * 60 * 2,
 	})
 	//jsonData,_ := json.Marshal(user)
-	session.Set("ginex_session_key",user)
+	session.Set("ginex_session_key", user)
 	_ = session.Save()
 }

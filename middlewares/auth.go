@@ -9,7 +9,6 @@ import (
 
 func Auth() gin.HandlerFunc {
 	return func(c *gin.Context) {
-
 		session := sessions.Default(c)
 		var value models.User
 		sessionValue := session.Get("ginex_session_key")
