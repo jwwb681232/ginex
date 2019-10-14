@@ -199,7 +199,17 @@
                             <li><a href="index_v2.html">Dashboard v2</a></li>
                         </ul>
                     </li>
-                    <li><a href="/home-cook"><i class="material-icons">date_range</i> <span>HomeCook</span></a></li>
+                    <li class="has-sub">
+                        <a href="javascript:;">
+                            <b class="caret pull-right"></b>
+                            <i class="material-icons">date_range</i>
+                            <span>HomeCook</span>
+                        </a>
+                        <ul class="sub-menu">
+                            <li><a href="javascript:void(0)" onclick="jump('/categories')">Category</a></li>
+                            <li><a href="javascript:void(0)" onclick="jump('/home-cook')">HomeCook</a></li>
+                        </ul>
+                    </li>
                     <!-- begin sidebar minify button -->
                     <li><a href="javascript:;" class="sidebar-minify-btn" data-click="sidebar-minify"><i class="fa fa-angle-double-left"></i></a></li>
                     <!-- end sidebar minify button -->
@@ -346,6 +356,9 @@
                 $('#iframe-content')[0].contentWindow.mini();
             });
         });
+        function jump(href){
+            $('#iframe-content').attr('src',href);
+        }
     </script>
     </body>
     </html>

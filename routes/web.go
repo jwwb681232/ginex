@@ -22,11 +22,11 @@ func Init() *gin.Engine {
 	router.POST("/login",auth.LoginController{}.Login)
 
 	authorized := router.Group("/")
-
 	authorized.Use(middlewares.Auth())
 	{
 		authorized.GET("/index",controllers.IndexController{}.Index)
 		authorized.GET("/dashboard",controllers.DashboardController{}.Index)
+		authorized.GET("/categories",controllers.CategoryController{}.Index)
 	}
 
 
