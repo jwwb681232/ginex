@@ -1,7 +1,0 @@
-package book
-
-func Get() {
-
-}
-
-
