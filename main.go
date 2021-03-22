@@ -10,13 +10,13 @@ import (
 )
 
 var (
-	db             = config.SetupDatabaseConnection()
-	userRepository = repository.NewUserRepository(db)
-	jwtService     = service.NewJWTService()
-	authService    = service.NewAuthService(userRepository)
-	authController = controller.NewAuthController(authService, jwtService)
-	profileService    = service.NewProfileService(userRepository)
-	profileController = controller.NewProfileController(profileService, jwtService)
+	db                = config.SetupDatabaseConnection()
+	userRepository    = repository.NewUserRepository(db)
+	jwtService        = service.NewJWTService()
+	authService       = service.NewAuthService(userRepository)
+	authController    = controller.NewAuthController(authService, jwtService)
+	userService       = service.NewUserService(userRepository)
+	userController    = controller.NewUserController(userService, jwtService)
 )
 
 func main() {
@@ -36,15 +36,10 @@ func main() {
 	{
 		api.POST("/auth/login", authController.Login)
 		api.POST("/auth/register", authController.Register)
-		api.GET("/profile",middleware.AuthorizeJWT(jwtService),profileController.Index)
+
+		api.GET("/user/profile",middleware.AuthorizeJWT(jwtService),userController.Profile)
+		api.PUT("/user",middleware.AuthorizeJWT(jwtService),userController.Update)
 	}
-
-
-
-
-
-
-
 
 	_ = r.Run()
 }
