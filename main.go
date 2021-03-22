@@ -32,14 +32,16 @@ func main() {
 		profileRoutes.GET("/a", profileController.Index)
 	}*/
 
-	api := r.Group("api")
+	userApi := r.Group("api")
 	{
-		api.POST("/auth/login", authController.Login)
-		api.POST("/auth/register", authController.Register)
+		userApi.POST("/auth/login", authController.Login)
+		userApi.POST("/auth/register", authController.Register)
 
-		api.GET("/user/profile",middleware.AuthorizeJWT(jwtService),userController.Profile)
-		api.PUT("/user",middleware.AuthorizeJWT(jwtService),userController.Update)
+		userApi.GET("/user/profile",middleware.AuthorizeJWT(jwtService),userController.Profile)
+		userApi.PUT("/user",middleware.AuthorizeJWT(jwtService),userController.Update)
 	}
+
+
 
 	_ = r.Run()
 }
