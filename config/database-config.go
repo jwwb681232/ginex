@@ -15,7 +15,7 @@ func SetupDatabaseConnection() *gorm.DB {
 		panic("Failed to load .env file")
 	}
 
-	dbHost := os.Getenv("DB_USERNAME")
+	dbHost := os.Getenv("DB_HOST")
 	dbPort := os.Getenv("DB_PORT")
 	dbDatabase := os.Getenv("DB_DATABASE")
 	dbUserName := os.Getenv("DB_USERNAME")

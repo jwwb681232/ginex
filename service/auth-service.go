@@ -27,6 +27,14 @@ func NewAuthService(userRepository repository.UserRepository) AuthService {
 }
 
 func (service *authService) VerifyCredential(email, password string) interface{} {
+	user := service.userRepository.FindByEmail(email)
+	if comparedPassword(user.Password,[]byte(password)) {
+		return user
+	}
+	return false
+}
+
+/*func (service *authService) VerifyCredential(email, password string) interface{} {
 	res := service.userRepository.VerifyCredential(email,password)
 	if v, ok := res.(entity.User); ok {
 		comparedPassword := comparedPassword(v.Password,[]byte(password))
@@ -36,7 +44,7 @@ func (service *authService) VerifyCredential(email, password string) interface{}
 		return false
 	}
 	return false
-}
+}*/
 
 func (service *authService) CreateUser(dto dto.RegisterDTO) entity.User {
 	userToCreate := entity.User{}
