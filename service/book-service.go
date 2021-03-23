@@ -4,6 +4,9 @@ import (
 	"GinRest/dto"
 	"GinRest/entity"
 	"GinRest/repository"
+	"fmt"
+	"github.com/mashingan/smapping"
+	"log"
 )
 
 type BookService interface {
@@ -20,27 +23,44 @@ type bookService struct {
 }
 
 func (service *bookService) Insert(dto dto.BookCreateDTO) entity.Book {
-	panic("implement me")
+	book := entity.Book{}
+	err := smapping.FillStruct(&book,smapping.MapFields(&dto))
+	if err != nil {
+		log.Fatalf("Failed to map %v",err)
+	}
+
+	res := service.bookRepository.CreateBook(book)
+	return res
 }
 
-func (service *bookService) Update(updateDTO dto.BookUpdateDTO) entity.Book {
-	panic("implement me")
+func (service *bookService) Update(dto dto.BookUpdateDTO) entity.Book {
+	book := entity.Book{}
+	err := smapping.FillStruct(&book,smapping.MapFields(&dto))
+	if err != nil {
+		log.Fatalf("Failed to map %v",err)
+	}
+
+	res := service.bookRepository.UpdateBook(book)
+	return res
 }
 
 func (service *bookService) Delete(book entity.Book) {
-	panic("implement me")
+	service.bookRepository.DeleteBook(book)
 }
 
 func (service *bookService) All() []entity.Book {
-	panic("implement me")
+	return service.bookRepository.Books()
 }
 
 func (service *bookService) FindByID(bookID uint64) entity.Book {
-	panic("implement me")
+	return service.bookRepository.FindBookByID(bookID)
 }
 
 func (service *bookService) IsAllowedToEdit(userID string, bookID uint64) bool {
-	panic("implement me")
+	book := service.bookRepository.FindBookByID(bookID)
+	id := fmt.Sprintf("%v",book.UserID)
+
+	return userID == id
 }
 
 func NewBookService(bookRepository repository.BookRepository) BookService {
