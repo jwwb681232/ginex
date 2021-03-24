@@ -17,28 +17,28 @@ var (
 	authController    = controller.NewAuthController(authService, jwtService)
 	userService       = service.NewUserService(userRepository)
 	userController    = controller.NewUserController(userService, jwtService)
+	bookRepository    = repository.NewBookRepository(db)
+	bookService       = service.NewBookService(bookRepository)
+	bookController    = controller.NewBookController(bookService, jwtService)
 )
 
 func main() {
 	defer config.CloseDatabaseConnection(db)
 	r := gin.Default()
-	/*authRoutes := r.Group("api/auth")
-	{
-		authRoutes.POST("/login", authController.Login)
-		authRoutes.POST("/register", authController.Register)
-	}
-	profileRoutes := r.Group("api/profile",middleware.AuthorizeJWT(jwtService))
-	{
-		profileRoutes.GET("/a", profileController.Index)
-	}*/
 
-	userApi := r.Group("api")
+	api := r.Group("api")
 	{
-		userApi.POST("/auth/login", authController.Login)
-		userApi.POST("/auth/register", authController.Register)
+		api.POST("/auth/login", authController.Login)
+		api.POST("/auth/register", authController.Register)
 
-		userApi.GET("/user/profile",middleware.AuthorizeJWT(jwtService),userController.Profile)
-		userApi.PUT("/user",middleware.AuthorizeJWT(jwtService),userController.Update)
+		api.GET("/user/profile",middleware.AuthorizeJWT(jwtService),userController.Profile)
+		api.PUT("/user",middleware.AuthorizeJWT(jwtService),userController.Update)
+
+		api.GET("/books",bookController.All)
+		api.POST("/books",middleware.AuthorizeJWT(jwtService),bookController.Insert)
+		api.GET("/books/:id",bookController.FindByID)
+		api.PUT("/books/:id",middleware.AuthorizeJWT(jwtService),bookController.Update)
+		api.DELETE("/books/:id",middleware.AuthorizeJWT(jwtService),bookController.Delete)
 	}
 
 
