@@ -1,15 +1,23 @@
-module ginex
+module GinRest
 
-go 1.13
+go 1.15
 
 require (
-	github.com/gin-contrib/sessions v0.0.1
-	github.com/gin-gonic/gin v1.4.0
-	github.com/go-playground/locales v0.12.1
-	github.com/go-playground/universal-translator v0.16.0
-	github.com/jinzhu/gorm v1.9.11
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/gin-gonic/gin v1.6.3
+	github.com/go-playground/validator/v10 v10.4.1 // indirect
+	github.com/golang/protobuf v1.4.3 // indirect
 	github.com/joho/godotenv v1.3.0
-	github.com/leodido/go-urn v1.1.0 // indirect
-	golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550
-	gopkg.in/go-playground/validator.v9 v9.30.0
+	github.com/json-iterator/go v1.1.10 // indirect
+	github.com/leodido/go-urn v1.2.1 // indirect
+	github.com/mashingan/smapping v0.1.6
+	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
+	github.com/modern-go/reflect2 v1.0.1 // indirect
+	github.com/ugorji/go v1.2.4 // indirect
+	golang.org/x/crypto v0.0.0-20210314154223-e6e6c4f2bb5b
+	golang.org/x/sys v0.0.0-20210314195730-07df6a141424 // indirect
+	google.golang.org/protobuf v1.25.0 // indirect
+	gopkg.in/yaml.v2 v2.4.0 // indirect
+	gorm.io/driver/mysql v1.0.5
+	gorm.io/gorm v1.21.3
 )
