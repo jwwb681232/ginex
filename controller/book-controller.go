@@ -71,7 +71,7 @@ func (controller *bookController) Insert(ctx *gin.Context) {
 
 func (controller *bookController) Update(ctx *gin.Context) {
 	var bookUpdateDTO dto.BookUpdateDTO
-	errDTO := ctx.ShouldBind(bookUpdateDTO)
+	errDTO := ctx.ShouldBind(&bookUpdateDTO)
 	if errDTO != nil {
 		response := helper.BuildErrorResponse("Failed to process request", errDTO.Error(), helper.EmptyObject{})
 		ctx.AbortWithStatusJSON(http.StatusBadRequest, response)
@@ -85,6 +85,8 @@ func (controller *bookController) Update(ctx *gin.Context) {
 		ctx.AbortWithStatusJSON(http.StatusForbidden, response)
 		return
 	}
+
+	bookUpdateDTO.UserID = authUser.ID
 
 	result := controller.bookService.Update(bookUpdateDTO)
 	response := helper.BuildResponse(true, "ok!", result)
